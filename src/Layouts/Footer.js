@@ -16,7 +16,6 @@ const Footer = ({muscles, onSelect, category}) => {
                         value={index}
                         onChange={onIndexSelect}
                         indicatorColor="primary"
-                        textColor="primary"
                         centered>
 
                         <Tab label="All"/>

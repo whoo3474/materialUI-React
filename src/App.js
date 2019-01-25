@@ -6,20 +6,23 @@ import { muscles, exercises } from './store';
 class App extends Component {
   state = {
     exercises,
-    category:'legs'
+    exercise:{}
   }
   getExercisesByMuscles() {
+    const initExercises = muscles.reduce((exercises, category)=> ({
+      ...exercises,
+      [category]:[]
+    }),{})
+    
     //  Object.entries() 메서드는 for...in와 같은 순서로 주어진 객체 자체의
     //  enumerable 속성 [key, value] 쌍의 배열을 반환합니다.
     return Object.entries(
       this.state.exercises.reduce((exercises,exercise)=>{
         const {muscles} = exercise
 
-        exercises[muscles] = exercises[muscles]
-          ? [...exercises[muscles], exercise]
-          : [exercise]
-          return exercises
-      },{})
+        exercises[muscles] =[...exercises[muscles],exercise]
+        return exercises
+      },initExercises)
     )
   }
   handleCategorySelect = category => {
@@ -40,9 +43,26 @@ class App extends Component {
       ]
     }))
   }
+  handleExerciseDelete = id => {
+    this.setState(({exercises}) => ({
+      exercises: exercises.filter(ex => ex.id !== id)
+    }))
+  }
+  handleExerciseSelectEdit = id => {
+    this.setState(({exercises})=>({
+      exercise:exercises.find( ex => ex.id === id),
+      editMode: true
+    }))
+  }
+  handleExerciseEdit = exercise => {
+    this.setState(({ exercises}) => ({
+      exercises: exercises.filter( ex => ex.id !== exercises.id),
+      exercise
+    }))
+  }
   render() {
     const exercises = this.getExercisesByMuscles(),
-    {category, exercise} = this.state
+    {category, exercise, editMode} = this.state
     return (
       <>
         <Header
@@ -52,7 +72,12 @@ class App extends Component {
           exercise={exercise}
           category={category}
           exercises={exercises}
-          onSelect={this.handleExerciseSelected}/>
+          editMode={editMode}
+          muscles={muscles}
+          onSelect={this.handleExerciseSelected}
+          onDelete={this.handleExerciseDelete}
+          onSelectEdit={this.handleExerciseSelectEdit}
+          onEdit={this.handleExerciseEdit}/>
         <Footer
           category={category}
           muscles={muscles}

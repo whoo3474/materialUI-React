@@ -1,11 +1,19 @@
 import React from 'react';
-import { Grid, Paper, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Grid, Paper, Typography, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Form from './Form';
 
 const index = ({
+    onEdit,
+    muscles,
     exercises, 
-    category, 
+    category,
+    editMode, 
     onSelect, 
-    exercise
+    exercise,
+    onDelete,
+    onSelectEdit
 }) => {
     const styles = {
         Paper : {
@@ -36,6 +44,14 @@ const index = ({
                                  button
                                  onClick={()=>onSelect(id)}>
                                     <ListItemText primary={title}/>
+                                    <ListItemSecondaryAction>
+                                    <IconButton>
+                                        <EditIcon onClick={()=>onSelectEdit(id)}/>
+                                    </IconButton>
+                                    <IconButton>
+                                        <DeleteIcon onClick={()=>onDelete(id)}/>
+                                    </IconButton>
+                                    </ListItemSecondaryAction>
                                 </ListItem>
                                 ))}
                         </List>
@@ -46,6 +62,11 @@ const index = ({
             </Grid>
             <Grid item sm>
                 <Paper style={styles.Paper} >
+                {editMode
+                ? <Form
+                muscles={muscles}
+                onSubmit={onEdit}/>
+                : <>
                     <Typography
                         variant="display1">
                     {exercise?exercise.title:'Welcome'}
@@ -54,8 +75,11 @@ const index = ({
                         variant="subheading"
                         style={{marginTop:20}}
                     >
-                    {exercise?exercise.description:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in aliquet sapien. Aenean condimentum iaculis mi ac facilisis. Vestibulum sit amet consectetur odio. Donec ut cursus risus. Duis vulputate, risus et tincidunt commodo, erat odio vestibulum velit, ac posuere lorem augue non erat. Mauris porta, ex sit amet accumsan viverra, mauris sem dictum erat, eu commodo lorem massa ac velit. Curabitur quis odio vel velit volutpat consequat. Nulla aliquet hendrerit convallis. Pellentesque et eros eu nulla congue gravida at hendrerit lectus. Etiam eget magna nec odio volutpat elementum. Mauris eu imperdiet purus. In blandit dui quam, vitae dictum tortor pulvinar a. Suspendisse eget dignissim urna, et aliquam nibh. Aliquam sit amet neque nec ex suscipit posuere. Nulla facilisi.'}
-                    </Typography>
+                    {exercise?exercise.description:'어서오세요! 이 웹사이트는 material-ui와 react를 이용해서 운동하는 방법에 대해서 적어놓은 사이트입니다. 저장과 삭제가 가능합니다.'}
+                    </Typography> 
+                </>
+                }
+
                 </Paper>
             </Grid>
         </Grid>

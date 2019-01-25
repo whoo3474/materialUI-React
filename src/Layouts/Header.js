@@ -9,11 +9,11 @@ const Header = ({muscles,onExerciseCreate}) => {
        <AppBar position="static">
             <Toolbar>
                 <Typography variant="headline" color="inherit" style={{flex:1}}>
-                    material-Ui
+                    운동 데이터베이스
                 </Typography>
                 <CreateDialog 
-                muscles={muscles}
-                onCreate={onExerciseCreate}
+                    muscles={muscles}
+                    onCreate={onExerciseCreate}
                 />
             </Toolbar>
       </AppBar>

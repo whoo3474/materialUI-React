@@ -1,18 +1,24 @@
 import React from 'react';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 
-const Footer = () => {
+const Footer = ({muscles, onSelect, category}) => {
+    const index = category
+        ?   muscles.findIndex(group => group === category) + 1
+        : 0
     return (
         <div>
             <AppBar position="static">
                     <Tabs
-                        value={0}
+                        value={index}
+                        // onChange={}
                         indicatorColor="primary"
                         textColor="primary"
-                        variant="fullWidth">
-                    <Tab value="one" label="New Arrivals in the Longest Text of Nonfiction" />
-                    <Tab value="two" label="Item Two" />
-                    <Tab value="three" label="Item Three" />
+                        centered>
+
+                        <Tab label="All"/>
+                        {muscles.map(group => 
+                            <Tab label={group}/>
+                        )}
                 </Tabs>
             </AppBar>
         </div>

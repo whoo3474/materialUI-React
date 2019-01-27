@@ -3,6 +3,7 @@ import Header from './Layouts/Header';
 import Footer from './Layouts/Footer';
 import Exercises from './Exercises'
 import { muscles, exercises } from './store';
+import CssBaseline from '@material-ui/core/CssBaseline';
 class App extends Component {
   state = {
     exercises,
@@ -32,7 +33,8 @@ class App extends Component {
   }
   handleExerciseSelected = id => {
     this.setState(({exercises})=>({
-      exercise:exercises.find( ex => ex.id === id)
+      exercise:exercises.find( ex => ex.id === id),
+      editMode:false
     }))
   }
   handleExerciseCreate = exercise => {
@@ -44,8 +46,10 @@ class App extends Component {
     }))
   }
   handleExerciseDelete = id => {
-    this.setState(({exercises}) => ({
-      exercises: exercises.filter(ex => ex.id !== id)
+    this.setState(({exercises, exercise, editMode}) => ({
+      exercises: exercises.filter(ex => ex.id !== id),
+      editMode: exercise.id == id ? false : editMode,
+      exercise: exercise.id == id ? {} : exercise
     }))
   }
   handleExerciseSelectEdit = id => {
@@ -58,13 +62,14 @@ class App extends Component {
     this.setState(({ exercises}) => ({
       exercises: exercises.filter( ex => ex.id !== exercises.id),
       exercise
-    }))
+    },exercise))
   }
   render() {
     const exercises = this.getExercisesByMuscles(),
     {category, exercise, editMode} = this.state
     return (
       <>
+      <CssBaseline />
         <Header
         muscles={muscles}
         onExerciseCreate={this.handleExerciseCreate}/>

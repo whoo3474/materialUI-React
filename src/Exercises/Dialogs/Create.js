@@ -14,29 +14,41 @@ class Create extends Component {
             open: !this.state.open
         })
     }
+
+    handleFormSubmit= exercise => {
+        this.handleToggle()
+
+        this.props.onCreate(exercise)
+    }
   
     
     render() {
         const { open } = this.state,
-        {muscles, onCreate} = this.props
+        {muscles} = this.props
         return (
             <>
-                <Button variant="fab" onClick={this.handleToggle} mini>
+                <Button
+                  variant="fab"
+                  onClick={this.handleToggle} 
+                  color='secondary' 
+                  mini>
                     <AddIcon/>
                 </Button>
                 <Dialog
                     open={open}
-                    onClose={this.handleToggle}>
-                    <DialogTitle id="form-dialog-title">
-                        다이어로그 연습
+                    onClose={this.handleToggle}
+                    fullWidth
+                    maxWidth='xs'>
+                    <DialogTitle>
+                        새로운 운동방법 추가하기
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            다이어로그 텍스트
+                            빈칸을 채워주세요.
                         </DialogContentText>
                         <Form
                         muscles={muscles}
-                        onSubmit={onCreate}/>
+                        onSubmit={this.handleFormSubmit}/>
                     </DialogContent>
 
                 </Dialog>

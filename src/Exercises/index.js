@@ -3,8 +3,42 @@ import { Grid, Paper, Typography, List, ListItem, ListItemText, ListItemSecondar
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Form from './Form';
+import { withStyles } from '@material-ui/core/styles';
+    
+const styles = theme => ({
+    paper : {
+        padding:20,
+        [theme.breakpoints.up('sm')]:{
+            marginTop:5,
+            height:'calc(100% - 10px)'
+        },
+        [theme.breakpoints.down('xs')]:{
+            height:'100%'
+        },
+        overflowY: 'auto'
+    },
+    '@global' : {
+        'html,body,#root' : {
+            height: '100%'
+        }
+    },
+    container: {
+        [theme.breakpoints.up('sm')]:{
+            height: 'calc(100% - 64px - 48px)'
+        },
+        [theme.breakpoints.down('xs')]:{
+            height: 'calc(100% - 56px - 48px)'
+        }
+    },
+    item : {
+        [theme.breakpoints.down('xs')]: {
+            height:'50%'
+        }
+    }
+})
 
 const index = ({
+    classes,
     onEdit,
     muscles,
     exercises, 
@@ -12,27 +46,25 @@ const index = ({
     editMode, 
     onSelect, 
     exercise,
+    exercise: {
+        id,
+        title =" 반갑습니다! ",
+        description= '이 사이트는 material-UI와 react의 연습을 위한 사이트입니다. 리스트의 운동을 선택하시면 설명이 나옵니다. 생성과 삭제, 수정이 가능합니다.'
+    },
     onDelete,
     onSelectEdit
 }) => {
-    const styles = {
-        Paper : {
-            padding:20,
-            marginTop:10,
-            marginBottom:10, 
-            height:500, 
-            overflowY: 'auto'
-        }
-    }
+
     return (
-        <Grid container>
-            <Grid item sm>
-                <Paper style={styles.Paper} >
+        <Grid container className={classes.container}>
+            <Grid item className={classes.item} xs={12} sm={6}>
+                <Paper className={classes.paper} >
                     {exercises.map(([group,exercises]) =>
                     !category || category === group
                     ? 
                     <>
                         <Typography
+                        color="secondary"
                         variant="headline"
                         style={{textTransform:'capitalize'}}>
                             {group}
@@ -45,10 +77,10 @@ const index = ({
                                  onClick={()=>onSelect(id)}>
                                     <ListItemText primary={title}/>
                                     <ListItemSecondaryAction>
-                                    <IconButton>
+                                    <IconButton color="primary">
                                         <EditIcon onClick={()=>onSelectEdit(id)}/>
                                     </IconButton>
-                                    <IconButton>
+                                    <IconButton color="primary">
                                         <DeleteIcon onClick={()=>onDelete(id)}/>
                                     </IconButton>
                                     </ListItemSecondaryAction>
@@ -60,24 +92,26 @@ const index = ({
                     )}
                 </Paper>
             </Grid>
-            <Grid item sm>
-                <Paper style={styles.Paper} >
+            <Grid item className={classes.item} xs={12} sm={6}>
+                <Paper className={classes.paper} >
+                <Typography
+                        variant="display1"
+                        color="secondary"
+                        gutterBottom>
+                    {title}
+                    </Typography>
                 {editMode
                 ? <Form
-                muscles={muscles}
-                onSubmit={onEdit}/>
-                : <>
-                    <Typography
-                        variant="display1">
-                    {exercise?exercise.title:'Welcome'}
-                    </Typography>
+                    key={id}
+                    exercise={exercise}    
+                    muscles={muscles}
+                    onSubmit={onEdit}/>
+                :
                     <Typography
                         variant="subheading"
-                        style={{marginTop:20}}
                     >
-                    {exercise?exercise.description:'어서오세요! 이 웹사이트는 material-ui와 react를 이용해서 운동하는 방법에 대해서 적어놓은 사이트입니다. 저장과 삭제가 가능합니다.'}
+                    {description}
                     </Typography> 
-                </>
                 }
 
                 </Paper>
@@ -86,4 +120,4 @@ const index = ({
     );
 };
 
-export default index;
+export default withStyles(styles)(index);

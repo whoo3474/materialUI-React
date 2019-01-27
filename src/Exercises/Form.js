@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
-import { TextField, FormControl, InputLabel, Select, MenuItem, withStyles, Button } from '@material-ui/core';
+import { TextField, FormControl, InputLabel, Select, MenuItem,  Button } from '@material-ui/core';
 
-const styles = theme => ({
-    FormControl : {
-        width: 300
-    }
-})
+
 class Form extends Component {
-    state = {
+    state = this.getInitState()
+
+    getInitState() {
+        const { exercise } = this.props;
+
+        return exercise ? exercise : {
             title: '',
             description: '',
             muscles: ''
+        }
     }
+
+    // static getDerivedStateFromProps({exercise}) {
+    //     return exercise || null
+    // }
+
+    // oomponentWillReceiveProps({exercise}) {
+    //     this.setState({
+    //         ...exercise
+    //     })
+    // }
       
     handleChange = name => ({ target: {value}}) => {
         this.setState({
@@ -19,10 +31,9 @@ class Form extends Component {
         });
       };
     handleSubmit = () => {
-        const { exercise } = this.state
         this.props.onSubmit({
-            ...exercise,
-            id:exercise.title.toLocaleLowerCase().replace(/ /g,'-'),
+            id:this.state.title.replace(/ /g,'-'),
+            ...this.state
         })
         this.setState({
             open:false,
@@ -32,11 +43,12 @@ class Form extends Component {
                 muscles:''
             }
         })
+        // this.setState(this.getInitState())
     }
 
     render() {
         const {title, description, muscles} = this.state,
-        { classes, muscles: categories} = this.props;
+        { exercise, muscles: categories} = this.props;
         return (
             <form>
             <TextField
@@ -44,19 +56,20 @@ class Form extends Component {
                 value={title}
                 onChange={this.handleChange('title')}
                 margin="normal"
-                className={classes.FormControl}
+                fullWidth
                 />
                 <br/>
 
                 <FormControl
-                className={classes.FormControl}>
+                fullWidth>
                     <InputLabel htmlFor="muscles">Muscles</InputLabel>
                     <Select
                         value={muscles}
-                        onChange={this.handleChange('muscles')}
-                    > 
+                        onChange={this.handleChange('muscles')}> 
+
                         {categories.map(category => 
-                        <MenuItem key={category} value={category}>{category}</MenuItem>
+                        <MenuItem key={category} value={category}>
+                        {category}</MenuItem>
                         )}
                     </Select>
                 </FormControl>
@@ -69,14 +82,16 @@ class Form extends Component {
                 rows="4"
                 onChange={this.handleChange('description')}
                 margin="normal"
-                className={classes.FormControl}
+                fullWidth
                 />
                 <br />
                 <Button
                     color="primary"
                     variant="raised"
-                    onClick={this.handleSubmit}>
-                    생성하기
+                    onClick={this.handleSubmit}
+                    disabled={!title||!muscles}>
+                    {/* title이나 muscles를 안받아오면 사용할수없다 */}
+                    {exercise ? '수정하기' : '생성하기'}
                 </Button>
             </form>
        
@@ -84,4 +99,4 @@ class Form extends Component {
     }
 }
 
-export default withStyles(styles)(Form);
+export default Form;

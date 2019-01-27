@@ -1,14 +1,20 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, IconButton, Typography } from '@material-ui/core';
+import { Toolbar, IconButton, Typography, withStyles } from '@material-ui/core';
 import CreateDialog from '../Exercises/Dialogs/Create';
 
-const Header = ({muscles,onExerciseCreate}) => {
+const styles = {
+    flex: {
+        flex:1
+    }
+}
+
+const Header = ({muscles,onExerciseCreate, classes}) => {
     return (
         <div>
        <AppBar position="static">
             <Toolbar>
-                <Typography variant="headline" color="inherit" style={{flex:1}}>
+                <Typography variant="headline" color="inherit" className={classes.flex}>
                     운동 데이터베이스
                 </Typography>
                 <CreateDialog 
@@ -21,4 +27,4 @@ const Header = ({muscles,onExerciseCreate}) => {
     );
 };
 
-export default Header;
+export default withStyles(styles)(Header);

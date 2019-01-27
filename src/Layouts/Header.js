@@ -9,7 +9,7 @@ const styles = {
     }
 }
 
-const Header = ({muscles,onExerciseCreate, classes}) => {
+const Header = ({onExerciseCreate, classes}) => {
     return (
         <div>
        <AppBar position="static">
@@ -17,10 +17,7 @@ const Header = ({muscles,onExerciseCreate, classes}) => {
                 <Typography variant="headline" color="inherit" className={classes.flex}>
                     운동 데이터베이스
                 </Typography>
-                <CreateDialog 
-                    muscles={muscles}
-                    onCreate={onExerciseCreate}
-                />
+                <CreateDialog />
             </Toolbar>
       </AppBar>
         </div>

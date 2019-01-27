@@ -14,16 +14,6 @@ class Form extends Component {
             muscles: ''
         }
     }
-
-    // static getDerivedStateFromProps({exercise}) {
-    //     return exercise || null
-    // }
-
-    // oomponentWillReceiveProps({exercise}) {
-    //     this.setState({
-    //         ...exercise
-    //     })
-    // }
       
     handleChange = name => ({ target: {value}}) => {
         this.setState({

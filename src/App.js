@@ -4,6 +4,7 @@ import Footer from './Layouts/Footer';
 import Exercises from './Exercises'
 import { muscles, exercises } from './store';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Provider } from './context';
 class App extends Component {
   state = {
     exercises,
@@ -60,34 +61,34 @@ class App extends Component {
   }
   handleExerciseEdit = exercise => {
     this.setState(({ exercises}) => ({
-      exercises: exercises.filter( ex => ex.id !== exercises.id),
+      exercises: [
+        ...exercises.filter( ex => ex.id !== exercises.id),
       exercise
-    },exercise))
+    ],
+    exercise}))
   }
+
+  getContext = () => ({
+    muscles,
+    ...this.state,
+    exercisesByMuscles : this.getExercisesByMuscles(),
+    onCategorySelect : this.handleCategorySelect,
+    onCreate: this.handleExerciseCreate,
+    onEdit: this.handleExerciseEdit,
+    onSelectEdit: this.handleExerciseSelectEdit,
+    onDelete : this.handleExerciseDelete,
+    onSelect : this.handleExerciseSelected
+  })
+  // redux의 store같은 느낌
+
   render() {
-    const exercises = this.getExercisesByMuscles(),
-    {category, exercise, editMode} = this.state
     return (
-      <>
-      <CssBaseline />
-        <Header
-        muscles={muscles}
-        onExerciseCreate={this.handleExerciseCreate}/>
-        <Exercises
-          exercise={exercise}
-          category={category}
-          exercises={exercises}
-          editMode={editMode}
-          muscles={muscles}
-          onSelect={this.handleExerciseSelected}
-          onDelete={this.handleExerciseDelete}
-          onSelectEdit={this.handleExerciseSelectEdit}
-          onEdit={this.handleExerciseEdit}/>
-        <Footer
-          category={category}
-          muscles={muscles}
-          onSelect={this.handleCategorySelect}/>
-      </>
+      <Provider value={this.getContext()}>
+        <CssBaseline />
+          <Header/>
+          <Exercises/>
+          <Footer/>
+      </Provider>
     );
   }
 }

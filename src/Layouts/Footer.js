@@ -1,22 +1,42 @@
-import React from 'react';
+// import React from 'react';
+// import { AppBar, Tabs, Tab } from '@material-ui/core';
+// import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+
+// const Footer = ({muscles, onSelect, category, width}) => {
+
+//     return (
+//         <div>
+
+//         </div>
+//     );
+// };
+
+
+import React, { Component } from 'react';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import { withContext }from '../context';
 
-const Footer = ({muscles, onSelect, category, width}) => {
-    // width 에서 sm, xs 등의 화면 크기를 알수 있다.
-    const index = category
-        ?   muscles.findIndex(group => group === category) + 1
-        : 0
+class Footer extends Component {
+        // width 에서 sm, xs 등의 화면 크기를 알수 있다.
+    getIndex =() => {
+    const { category, muscles } = this.props;
+    return category
+     ?   muscles.findIndex(group => group === category) + 1
+     : 0
+    }
 
-    const onIndexSelect =(e,index) => {
-            onSelect(index === 0 ? '' : muscles[index-1])
+    onIndexSelect =(e,index) => {
+        const {onCategorySelect, muscles} = this.props
+        onCategorySelect(index === 0 ? '' : muscles[index-1])
         }
-    return (
-        <div>
+    render() {
+        const { width,muscles } = this.props
+        return (
             <AppBar position="static">
                     <Tabs
-                        value={index}
-                        onChange={onIndexSelect}
+                        value={this.getIndex()}
+                        onChange={this.onIndexSelect}
                         indicatorColor="secondary"
                         textColor="secondary"
                         centered={width !== 'xs'}
@@ -30,8 +50,8 @@ const Footer = ({muscles, onSelect, category, width}) => {
                         )}
                 </Tabs>
             </AppBar>
-        </div>
-    );
-};
+        );
+    }
+}
 
-export default withWidth()(Footer);
+export default withContext(withWidth()(Footer));
